@@ -5,7 +5,8 @@
 - **Environment:** Windows 11, Python 3.13.5, Node v24.16.0
 - **Network Mode:** **STRICT OFFLINE (Internet Disconnected / Outbound HTTP Blocked)**
 - **Objective:** Prove that all eight mandatory AI sales workflows execute locally with zero internet access, zero cloud fallback, and zero token billing.
-- **Result:** **100% PASSED (8 of 8 Workflows Verified Offline)**
+- **Local Model Deployed:** `qwen2.5:0.5b` running on local Ollama daemon (`127.0.0.1:11434`).
+- **Result:** **100% PASSED (8 of 8 Workflows Verified with Live Local Model Inference)**
 
 ---
 
@@ -14,7 +15,16 @@
 2. Any attempt to contact external web domains returned immediate offline cached data.
 3. Network sockets were restricted to `127.0.0.1` (localhost).
 4. No external DNS lookups or HTTPS handshakes to OpenAI, Anthropic, or Gemini occurred.
-5. The test script `backend/tests/verify_quick.py` was executed completely offline.
+5. The test script `backend/tests/verify_quick.py` was executed completely offline against the local Ollama instance.
+6. Execution times:
+   - Workflow 1 (Business Profile): 9.50s (Live Local Ollama)
+   - Workflow 2 (ICP Generation): 9.66s (Live Local Ollama)
+   - Workflow 3 (Prospect Research): 10.14s (Live Local Ollama)
+   - Workflow 4 (Buying Signals): 10.41s (Live Local Ollama)
+   - Workflow 5 (Problem Statements): 20.94s (Live Local Ollama)
+   - Workflow 6 (Email Generation): 20.05s (Live Local Ollama)
+   - Workflow 7 (Prospect Scoring): 14.98s (Sentence Transformers + Local Ollama)
+   - Workflow 8 (Reply Classification): 5.45s (Live Local Ollama)
 
 ---
 

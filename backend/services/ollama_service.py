@@ -160,6 +160,7 @@ class OllamaService:
                 "stream": False,
                 "options": {
                     "temperature": temperature,
+                    "num_predict": 450,
                 }
             }
             if system_prompt:

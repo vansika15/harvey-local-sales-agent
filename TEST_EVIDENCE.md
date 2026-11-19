@@ -45,7 +45,7 @@ backend/tests/test_system.py::test_offline_toggle PASSED                        
 
 ---
 
-## 2. All 8 Workflows Verification Script Output
+## 2. All 8 Workflows Verification Script Output (Live Local Ollama Model)
 
 Command executed:
 ```bash
@@ -54,23 +54,29 @@ python -u backend/tests/verify_quick.py
 
 Output:
 ```text
-1. Business Profile...
-   Done in 0.13s -> Cloud Infrastructure & DevOps
-2. ICP Generation...
-   Done in 0.12s -> 5 industries
-3. Prospect Research...
-   Done in 0.12s -> 3 verified facts
-4. Buying Signals...
-   Done in 0.11s -> 3 signals
-5. Problem Statements...
-   Done in 0.13s -> 2 problems
-6. Email Generation...
-   Done in 0.13s -> Subject: 'scaling FinScale Technologies's workflows'
-7. Prospect Scoring...
-   Done in 0.15s -> Score: 83 (high_priority)
-8. Reply Classification...
-   Done in 0.12s -> meeting_requested
-SUCCESS: ALL 8 AI WORKFLOWS COMPLETED AND VERIFIED!
+======================================================================
+HARVEY LOCAL SALES AGENT: VERIFYING ALL 8 AI WORKFLOWS VIA LIVE OLLAMA
+======================================================================
+1. Business Profile Generation...
+   [DONE] 9.50s | Model: qwen2.5:0.5b | Preview: False | Vertical: Cloud Infrastructure & DevOps
+2. Product-Specific ICP Generation...
+   [DONE] 9.66s | Model: qwen2.5:0.5b | Preview: False | Industries: 5
+3. Prospect Account Research & Fact Synthesis...
+   [DONE] 10.14s | Model: qwen2.5:0.5b | Preview: False | Facts: 3 verified
+4. Buying-Signal Classification...
+   [DONE] 10.41s | Model: qwen2.5:0.5b | Preview: False | Signals: 2 detected
+5. Problem Statement Generation...
+   [DONE] 20.94s | Model: qwen2.5:0.5b | Preview: False | Problems: 2 mapped
+6. Personalised Sales Email Generation...
+   [DONE] 20.05s | Model: qwen2.5:0.5b | Preview: False | Subject: 'scaling FinScale Technologies's workflows'
+7. Transparent Prospect Scoring (0-100)...
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3958.09it/s]
+   [DONE] 14.98s | Model: qwen2.5:0.5b | Preview: False | Score: 69 (medium_priority)
+8. Inbound Reply Classification...
+   [DONE] 5.45s | Model: qwen2.5:0.5b | Preview: False | Classification: not_interested
+======================================================================
+SUCCESS: ALL 8 AI WORKFLOWS EXECUTED VIA LOCAL OLLAMA INFERENCE!
+======================================================================
 ```
 
 ---

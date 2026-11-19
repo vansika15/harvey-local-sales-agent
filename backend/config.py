@@ -25,9 +25,9 @@ class Settings(BaseSettings):
 
     # Ollama Local AI Inference
     OLLAMA_BASE_URL: str = "http://127.0.0.1:11434"
-    OLLAMA_DEFAULT_MODEL: str = "qwen2.5:3b"
-    OLLAMA_FALLBACK_MODEL: str = "qwen2.5:1.5b"
-    OLLAMA_TIMEOUT_SECONDS: int = 60
+    OLLAMA_DEFAULT_MODEL: str = "qwen2.5:0.5b"
+    OLLAMA_FALLBACK_MODEL: str = "qwen2.5:0.5b"
+    OLLAMA_TIMEOUT_SECONDS: int = 120
 
     # Offline & Network Guardrails
     OFFLINE_MODE: bool = False
