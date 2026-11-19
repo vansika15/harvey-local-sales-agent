@@ -117,13 +117,19 @@ Return strictly valid JSON only."""
     except Exception:
         parsed = json.loads(deterministic_fallback)
 
-    # Persist in ConversationReply table
+    # Persist in ConversationReply table with guard against small-model label confusion
+    final_classification = parsed.get("classification", fallback_class)
+    msg_low = inbound_message.lower()
+    if any(k in msg_low for k in ["zoom", "call on", "calendar", "book a", "schedule a", "hop on a call"]):
+        if final_classification in ["not_interested", "unqualified"]:
+            final_classification = "meeting_requested"
+
     reply_record = ConversationReply(
         prospect_id=prospect.id,
         product_id=product.id,
         company_id=prospect.company_id,
         inbound_message=inbound_message,
-        classification=parsed.get("classification", fallback_class),
+        classification=final_classification,
         confidence=float(parsed.get("confidence", 0.9)),
         detected_sentiment=parsed.get("detected_sentiment", fallback_sentiment),
         detected_objections=json.dumps(parsed.get("detected_objections", [])),

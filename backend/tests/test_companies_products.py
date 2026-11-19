@@ -37,8 +37,15 @@ def test_create_and_delete_company(client):
 
 
 def test_multi_product_separation(client):
-    # Retrieve CloudOps Dynamics (ID 1)
-    res1 = client.get("/api/products?company_id=1")
+    # Retrieve companies
+    comp_res = client.get("/api/companies")
+    assert comp_res.status_code == 200
+    comps = comp_res.json()
+    c1 = next(c for c in comps if c["name"] == "CloudOps Dynamics")
+    c2 = next(c for c in comps if c["name"] == "Bookwell Systems")
+
+    # Retrieve CloudOps Dynamics products
+    res1 = client.get(f"/api/products?company_id={c1['id']}")
     assert res1.status_code == 200
     p1 = res1.json()
     assert len(p1) == 2
@@ -46,8 +53,8 @@ def test_multi_product_separation(client):
     assert "KubeGuard AI" in p1_names
     assert "LogStream Pro" in p1_names
 
-    # Retrieve Bookwell Systems (ID 2)
-    res2 = client.get("/api/products?company_id=2")
+    # Retrieve Bookwell Systems products
+    res2 = client.get(f"/api/products?company_id={c2['id']}")
     assert res2.status_code == 200
     p2 = res2.json()
     assert len(p2) == 2

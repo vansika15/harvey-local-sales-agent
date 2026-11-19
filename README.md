@@ -124,16 +124,17 @@ python backend/tests/verify_quick.py
 
 ## 6. Deliverables Index
 
-- [TECHNICAL_DOCUMENTATION.md](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/TECHNICAL_DOCUMENTATION.md) — Architecture, database models, failure handling, and workflow specs.
-- [MODEL_LICENCES.md](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/MODEL_LICENCES.md) — Exact licenses of Qwen 2.5, Llama 3.2, and dependencies.
-- [COST_AND_DEPENDENCY_STATEMENT.md](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/COST_AND_DEPENDENCY_STATEMENT.md) — Zero-cost guarantee and cloud API prohibition proof.
-- [HARDWARE_REQUIREMENTS.md](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/HARDWARE_REQUIREMENTS.md) — Hardware tiers, RAM profiling, and model download sizes.
-- [OFFLINE_TEST_REPORT.md](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/OFFLINE_TEST_REPORT.md) — Formal offline acceptance test results across all 8 workflows.
-- [TEST_EVIDENCE.md](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/TEST_EVIDENCE.md) — Raw test outputs and build transcripts.
-- [DEMO_SCRIPT.md](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/DEMO_SCRIPT.md) — Step-by-step 5–10 minute screen recording guide.
-- [PROJECT_PROGRESS.md](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/PROJECT_PROGRESS.md) — Complete milestone tracking log.
+- [END_TO_END_TEST_REPORT.md](END_TO_END_TEST_REPORT.md) — Comprehensive functional test report across all 8 workflows with 15 live UI screenshots.
+- [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md) — Architecture, database models, failure handling, and workflow specs.
+- [MODEL_LICENCES.md](MODEL_LICENCES.md) — Exact licenses of Qwen 2.5, Llama 3.2, and dependencies.
+- [COST_AND_DEPENDENCY_STATEMENT.md](COST_AND_DEPENDENCY_STATEMENT.md) — Zero-cost guarantee and cloud API prohibition proof.
+- [HARDWARE_REQUIREMENTS.md](HARDWARE_REQUIREMENTS.md) — Hardware tiers, RAM profiling, and model download sizes.
+- [OFFLINE_TEST_REPORT.md](OFFLINE_TEST_REPORT.md) — Formal offline acceptance test results across all 8 workflows.
+- [TEST_EVIDENCE.md](TEST_EVIDENCE.md) — Raw test outputs and build transcripts.
+- [DEMO_SCRIPT.md](DEMO_SCRIPT.md) — Step-by-step 5–10 minute screen recording guide.
+- [PROJECT_PROGRESS.md](PROJECT_PROGRESS.md) — Complete milestone tracking log.
 
 ---
 
 ## 7. License & Attribution
-Harvey Local Sales Agent is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)** in accordance with the upstream repository [Sellbird (formerly Harvey)](https://github.com/ethanplusai/harvey), Copyright (C) 2026 Ethan Rogers and contributors. See [LICENSE](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/LICENSE) and [NOTICE](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/NOTICE) for complete attribution.
+Harvey Local Sales Agent is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)** in accordance with the upstream repository [Sellbird (formerly Harvey)](https://github.com/ethanplusai/harvey), Copyright (C) 2026 Ethan Rogers and contributors. See [LICENSE](LICENSE) and [NOTICE](NOTICE) for complete attribution.

@@ -5,13 +5,20 @@ from backend.config import settings
 from backend.services.ollama_service import ollama_service
 
 
+def get_first_prospect_id(client):
+    prospects = client.get("/api/prospects").json()
+    return prospects[0]["id"] if prospects else 1
+
+
 def test_offline_mode_web_research(client):
     # Enable offline mode
     client.post("/api/system/toggle-offline?enabled=true")
     assert settings.OFFLINE_MODE is True
 
+    pr_id = get_first_prospect_id(client)
+
     # Attempt prospect research in offline mode
-    res = client.post("/api/prospects/2/research", json={"force_live_scrape": True})
+    res = client.post(f"/api/prospects/{pr_id}/research", json={"force_live_scrape": True})
     assert res.status_code == 200
     data = res.json()
     assert data["offline_cached"] is True
@@ -24,8 +31,10 @@ def test_offline_mode_web_research(client):
 
 
 def test_ollama_unavailable_queues_and_logs(client):
+    pr_id = get_first_prospect_id(client)
+
     # Trigger an AI workflow
-    res = client.post("/api/prospects/1/classify-signals", json={})
+    res = client.post(f"/api/prospects/{pr_id}/classify-signals", json={})
     assert res.status_code == 200
     data = res.json()
     assert "signals" in data

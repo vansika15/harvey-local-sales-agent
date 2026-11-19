@@ -43,7 +43,7 @@
 
 ### Workflow 1: Company and Product Management (Multi-Tenant & Persistence)
 
-- **Screenshot:** [`01_company_added.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/01_company_added.png), [`02_product_added.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/02_product_added.png), [`03_persisted_after_refresh.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/03_persisted_after_refresh.png)
+- **Screenshot:** [`01_company_added.png`](test_screenshots/01_company_added.png), [`02_product_added.png`](test_screenshots/02_product_added.png), [`03_persisted_after_refresh.png`](test_screenshots/03_persisted_after_refresh.png)
 1. **Whether the UI works:** **YES.** The navigation modal opened smoothly, form fields accepted input, dropdown selectors updated reactively, and toast notifications announced creation.
 2. **Whether the backend works:** **YES.** FastAPI endpoints `POST /api/companies` and `POST /api/products` processed requests with schema validation and committed records.
 3. **Whether actual local AI inference occurred:** N/A for raw CRUD; AI models utilize this data downstream.
@@ -60,7 +60,7 @@
 
 ### Workflow 2: Business Profile Generation (PDF Workflow A)
 
-- **Screenshot:** [`04_business_profile_generated.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/04_business_profile_generated.png)
+- **Screenshot:** [`04_business_profile_generated.png`](test_screenshots/04_business_profile_generated.png)
 1. **Whether the UI works:** **YES.** Clicking the *"Generate AI Business Profile"* button placed the button into a spinning loading state (`Generating Profile...`), disabled concurrent clicks, and rendered the executive profile card upon completion.
 2. **Whether the backend works:** **YES.** `POST /api/companies/3/generate-profile` extracted company background notes and invoked the central Ollama service.
 3. **Whether actual local AI inference occurred:** **YES.** Confirmed via `model_execution_logs`:
@@ -84,7 +84,7 @@
 
 ### Workflow 3: Product-Specific ICP Generation (PDF Workflow B)
 
-- **Screenshot:** [`05_icp_generated.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/05_icp_generated.png)
+- **Screenshot:** [`05_icp_generated.png`](test_screenshots/05_icp_generated.png)
 1. **Whether the UI works:** **YES.** The *"Generate ICP Profile"* button triggered reactive state transition, displaying target industries, buyer roles, triggers, and disqualifiers as interactive badges.
 2. **Whether the backend works:** **YES.** `POST /api/products/5/generate-icp` assembled the product context and executed the local ICP generator pipeline.
 3. **Whether actual local AI inference occurred:** **YES.** Confirmed via `model_execution_logs`:
@@ -106,7 +106,7 @@
 
 ### Workflow 4: Prospect Discovery & Research (PDF Workflow C)
 
-- **Screenshot:** [`06_prospect_added.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/06_prospect_added.png), [`07_prospect_researched.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/07_prospect_researched.png)
+- **Screenshot:** [`06_prospect_added.png`](test_screenshots/06_prospect_added.png), [`07_prospect_researched.png`](test_screenshots/07_prospect_researched.png)
 1. **Whether the UI works:** **YES.** Form accepted manual addition of prospect **Elena Rostova** (CISO at **SecureBank International**), rendered the prospect card, and navigated to the Account Research view where the prospect was selectable in the dropdown.
 2. **Whether the backend works:** **YES.** `POST /api/prospects` committed prospect entity; `POST /api/prospects/4/research` performed polite HTTP web lookup with `robots.txt` compliance, rate limiting, and fallback synthesis.
 3. **Whether actual local AI inference occurred:** **YES.** Confirmed via `model_execution_logs`:
@@ -128,7 +128,7 @@
 
 ### Workflow 5: Buying-Signal Classification (PDF Workflow D)
 
-- **Screenshot:** [`08_signals_classified.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/08_signals_classified.png)
+- **Screenshot:** [`08_signals_classified.png`](test_screenshots/08_signals_classified.png)
 1. **Whether the UI works:** **YES.** Selected prospect from dropdown, clicked *"Classify Buying Signals"*, and observed 2 high-confidence signal cards render with color-coded confidence pills and sales rationale.
 2. **Whether the backend works:** **YES.** `POST /api/prospects/4/classify-signals` ingested account profile and research notes, invoking Ollama signal classification prompt.
 3. **Whether actual local AI inference occurred:** **YES.** Confirmed via `model_execution_logs`:
@@ -148,7 +148,7 @@
 
 ### Workflow 6: Problem Statement Generation (PDF Workflow E)
 
-- **Screenshot:** [`09_problems_generated.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/09_problems_generated.png)
+- **Screenshot:** [`09_problems_generated.png`](test_screenshots/09_problems_generated.png)
 1. **Whether the UI works:** **YES.** Displayed problem cards with severity tags (`high`, `medium`), detailed business impact assessments, and clear connections to NexusGuard Sentry.
 2. **Whether the backend works:** **YES.** `POST /api/prospects/4/generate-problems` bound prospect research and product capabilities into the local AI problem formulation engine.
 3. **Whether actual local AI inference occurred:** **YES.** Confirmed via `model_execution_logs`:
@@ -168,7 +168,7 @@
 
 ### Workflow 7: Personalised Sales Email Generation (PDF Workflow F)
 
-- **Screenshot:** [`10_email_generated.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/10_email_generated.png)
+- **Screenshot:** [`10_email_generated.png`](test_screenshots/10_email_generated.png)
 1. **Whether the UI works:** **YES.** Rendered sequence step selector (Step 1 Cold Outreach), generated subject line, structured hook opening, value proposition, and low-friction call-to-action with copy-to-clipboard functionality.
 2. **Whether the backend works:** **YES.** `POST /api/prospects/4/generate-email` synthesized prospect Elena Rostova, role CISO, and NexusGuard Sentry features into a zero-fabrication outreach message.
 3. **Whether actual local AI inference occurred:** **YES.** Confirmed via `model_execution_logs`:
@@ -190,7 +190,7 @@
 
 ### Workflow 8: Multi-Factor Prospect Scoring (PDF Workflow G)
 
-- **Screenshot:** [`11_prospect_scored.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/11_prospect_scored.png)
+- **Screenshot:** [`11_prospect_scored.png`](test_screenshots/11_prospect_scored.png)
 1. **Whether the UI works:** **YES.** Rendered radial score gauge (65/100), priority category pill (`MEDIUM PRIORITY`), three distinct breakdown progress bars (ICP Fit 22/40, Signals 28/40, Reachability 15/20), and detailed justification narrative.
 2. **Whether the backend works:** **YES.** `POST /api/prospects/4/score` aggregated multi-dimensional metrics and invoked local Ollama to synthesize the scoring rationale.
 3. **Whether actual local AI inference occurred:** **YES.** Confirmed via `model_execution_logs`:
@@ -214,7 +214,7 @@
 
 ### Workflow 9: Inbound Reply Classification & Triage (PDF Workflow H)
 
-- **Screenshot:** [`12_reply_classified.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/12_reply_classified.png)
+- **Screenshot:** [`12_reply_classified.png`](test_screenshots/12_reply_classified.png)
 1. **Whether the UI works:** **YES.** Inbound message textarea accepted sample customer reply text (`"Hi Elena here. This looks relevant given our upcoming SOC2 audit. Can your team hop on a call this Thursday at 3 PM EST?"`), triggered classification, and displayed predicted intent badge, sentiment indicator, explanation, and drafted response.
 2. **Whether the backend works:** **YES.** `POST /api/replies/classify` parsed intent categories (`interested`, `not_interested`, `objection`, `follow_up_required`, `meeting_requested`) via local AI prompt.
 3. **Whether actual local AI inference occurred:** **YES.** Confirmed via `model_execution_logs`:
@@ -238,12 +238,12 @@
 ### Additional Verified Diagnostic & Audit Views
 
 #### View 10: Model Execution Logs & Audit Trail
-- **Screenshot:** [`13_model_audit_logs.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/13_model_audit_logs.png)
+- **Screenshot:** [`13_model_audit_logs.png`](test_screenshots/13_model_audit_logs.png)
 - **Status:** **PASSED**
 - **Verification:** UI renders the live audit stream showing every single inference request, prompt tokens, completion tokens, latency (ms), model identifier (`qwen2.5:0.5b`), and status. Demonstrates 100% transparency and proves zero cloud fallback.
 
 #### View 11: System Settings & Health Diagnostics
-- **Screenshot:** [`14_settings_health.png`](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/14_settings_health.png)
+- **Screenshot:** [`14_settings_health.png`](test_screenshots/14_settings_health.png)
 - **Status:** **PASSED**
 - **Verification:** UI displays host hardware specifications (Intel i5 CPU, RAM availability, GPU status), active Ollama connection health (`Connected: http://127.0.0.1:11434`), SQLite database connection, and strict offline operation toggle.
 
@@ -255,21 +255,21 @@ All full-resolution screenshots were captured during the live Selenium browser t
 
 | Step / Workflow | Screenshot Filename | Link | Content Description |
 | :--- | :--- | :--- | :--- |
-| **Overview** | `00_dashboard_initial.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/00_dashboard_initial.png) | SaaS overview dashboard with system health & top prospects |
-| **Workflow 1** | `01_company_added.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/01_company_added.png) | Organization management view with new company *TestCorp Nexus* |
-| **Workflow 1** | `02_product_added.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/02_product_added.png) | Product catalog view with new product *NexusGuard Sentry* |
-| **Workflow 1** | `03_persisted_after_refresh.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/03_persisted_after_refresh.png) | Dashboard after browser reload confirming active company persistence |
-| **Workflow 2** | `04_business_profile_generated.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/04_business_profile_generated.png) | Local AI-generated executive profile for *TestCorp Nexus* |
-| **Workflow 3** | `05_icp_generated.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/05_icp_generated.png) | Product-specific ICP for *NexusGuard Sentry* with target roles/pain points |
-| **Workflow 4** | `06_prospect_added.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/06_prospect_added.png) | Prospect list with *Elena Rostova (SecureBank International)* added |
-| **Workflow 4** | `07_prospect_researched.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/07_prospect_researched.png) | Public web research dossier with verified facts and audited source URLs |
-| **Workflow 5** | `08_signals_classified.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/08_signals_classified.png) | Classified buying signals (management change, product launch) |
-| **Workflow 6** | `09_problems_generated.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/09_problems_generated.png) | Problem statement analysis mapped directly to NexusGuard Sentry |
-| **Workflow 7** | `10_email_generated.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/10_email_generated.png) | Personalized sales email with subject, hook, value prop, and CTA |
-| **Workflow 8** | `11_prospect_scored.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/11_prospect_scored.png) | Radial score gauge (65/100) and multi-factor score breakdown |
-| **Workflow 9** | `12_reply_classified.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/12_reply_classified.png) | Inbound reply triage (`meeting_requested`, positive, auto-response) |
-| **Audit Logs** | `13_model_audit_logs.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/13_model_audit_logs.png) | Full audit trail table confirming local execution times and tokens |
-| **Settings** | `14_settings_health.png` | [View Screenshot](file:///C:/Users/hp/.gemini/antigravity/scratch/harvey-local-sales-agent/test_screenshots/14_settings_health.png) | System settings, hardware telemetry, and local model status |
+| **Overview** | `00_dashboard_initial.png` | [View Screenshot](test_screenshots/00_dashboard_initial.png) | SaaS overview dashboard with system health & top prospects |
+| **Workflow 1** | `01_company_added.png` | [View Screenshot](test_screenshots/01_company_added.png) | Organization management view with new company *TestCorp Nexus* |
+| **Workflow 1** | `02_product_added.png` | [View Screenshot](test_screenshots/02_product_added.png) | Product catalog view with new product *NexusGuard Sentry* |
+| **Workflow 1** | `03_persisted_after_refresh.png` | [View Screenshot](test_screenshots/03_persisted_after_refresh.png) | Dashboard after browser reload confirming active company persistence |
+| **Workflow 2** | `04_business_profile_generated.png` | [View Screenshot](test_screenshots/04_business_profile_generated.png) | Local AI-generated executive profile for *TestCorp Nexus* |
+| **Workflow 3** | `05_icp_generated.png` | [View Screenshot](test_screenshots/05_icp_generated.png) | Product-specific ICP for *NexusGuard Sentry* with target roles/pain points |
+| **Workflow 4** | `06_prospect_added.png` | [View Screenshot](test_screenshots/06_prospect_added.png) | Prospect list with *Elena Rostova (SecureBank International)* added |
+| **Workflow 4** | `07_prospect_researched.png` | [View Screenshot](test_screenshots/07_prospect_researched.png) | Public web research dossier with verified facts and audited source URLs |
+| **Workflow 5** | `08_signals_classified.png` | [View Screenshot](test_screenshots/08_signals_classified.png) | Classified buying signals (management change, product launch) |
+| **Workflow 6** | `09_problems_generated.png` | [View Screenshot](test_screenshots/09_problems_generated.png) | Problem statement analysis mapped directly to NexusGuard Sentry |
+| **Workflow 7** | `10_email_generated.png` | [View Screenshot](test_screenshots/10_email_generated.png) | Personalized sales email with subject, hook, value prop, and CTA |
+| **Workflow 8** | `11_prospect_scored.png` | [View Screenshot](test_screenshots/11_prospect_scored.png) | Radial score gauge (65/100) and multi-factor score breakdown |
+| **Workflow 9** | `12_reply_classified.png` | [View Screenshot](test_screenshots/12_reply_classified.png) | Inbound reply triage (`meeting_requested`, positive, auto-response) |
+| **Audit Logs** | `13_model_audit_logs.png` | [View Screenshot](test_screenshots/13_model_audit_logs.png) | Full audit trail table confirming local execution times and tokens |
+| **Settings** | `14_settings_health.png` | [View Screenshot](test_screenshots/14_settings_health.png) | System settings, hardware telemetry, and local model status |
 
 ---
 
