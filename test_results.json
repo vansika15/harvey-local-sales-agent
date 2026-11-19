@@ -1,0 +1,55 @@
+{
+  "1. Company and Product Management": {
+    "status": "PASSED",
+    "company_id": 3,
+    "product_id": 5,
+    "details": "Added TestCorp Nexus and NexusGuard Sentry. Verified persistence in SQLite and DOM after page reload."
+  },
+  "2. Business Profile Generation": {
+    "status": "PASSED",
+    "model_used": "qwen2.5:0.5b",
+    "latency_ms": 15955,
+    "details": "Generated executive profile via local Ollama inference (qwen2.5:0.5b)."
+  },
+  "3. Product-Specific ICP Generation": {
+    "status": "PASSED",
+    "icp_id": 2,
+    "details": "Generated product-specific ICP for NexusGuard Sentry with target industries, roles, pain points, and pitch angle."
+  },
+  "4. Prospect Research": {
+    "status": "PASSED",
+    "research_id": 2,
+    "source_url": "[\"https://securebank.example\"]",
+    "timestamp": "2026-11-19 15:05:19.021355",
+    "details": "Synthesized account dossier isolating confirmed public observations from unavailable data."
+  },
+  "5. Buying-Signal Classification": {
+    "status": "PASSED",
+    "signals_count": 2,
+    "details": "Classified commercial buying signals with actionable sales rationale via local AI."
+  },
+  "6. Problem Statement Generation": {
+    "status": "PASSED",
+    "problems_count": 2,
+    "details": "Identified acute business problems and mapped direct solution fit to NexusGuard Sentry."
+  },
+  "7. Personalised Email Generation": {
+    "status": "PASSED",
+    "email_id": 3,
+    "subject": "scaling SecureBank International's workflows",
+    "details": "Crafted personalized cold email grounded in Elena's CISO role and SecureBank observations with zero hallucinations."
+  },
+  "8. Prospect Scoring": {
+    "status": "PASSED",
+    "score": 65,
+    "category": "medium_priority",
+    "details": "Calculated multidimensional score (65/100) with full Fit/Signals/Reachability breakdown."
+  },
+  "9. Reply Classification": {
+    "status": "PASSED",
+    "reply_id": 3,
+    "intent": "meeting_requested",
+    "sentiment": "positive",
+    "details": "Triaged intent as 'meeting_requested' with positive sentiment and context-aware drafted response."
+  }
+}

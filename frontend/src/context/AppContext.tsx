@@ -50,6 +50,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
+  const setAndStoreActiveCompany = (c: Company | null) => {
+    setActiveCompany(c);
+    if (c) {
+      localStorage.setItem("harvey_active_company_id", String(c.id));
+    } else {
+      localStorage.removeItem("harvey_active_company_id");
+    }
+  };
+
+  const setAndStoreActiveProduct = (p: Product | null) => {
+    setActiveProduct(p);
+    if (p) {
+      localStorage.setItem("harvey_active_product_id", String(p.id));
+    } else {
+      localStorage.removeItem("harvey_active_product_id");
+    }
+  };
+
   const refreshData = async () => {
     try {
       const [healthData, hwData, compData] = await Promise.all([
@@ -62,16 +80,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setHardware(hwData);
       setCompanies(compData);
 
-      // Default active company
+      // Default active company (respecting localStorage or current active)
       if (compData.length > 0) {
-        const currentActive = compData.find((c) => c.id === activeCompany?.id) || compData[0];
+        const storedCompId = localStorage.getItem("harvey_active_company_id");
+        const targetId = activeCompany?.id || (storedCompId ? Number(storedCompId) : null);
+        const currentActive = compData.find((c) => c.id === targetId) || compData[0];
         setActiveCompany(currentActive);
 
         // Fetch products for active company
         const prodData = await api.getProducts(currentActive.id);
         setProducts(prodData);
         if (prodData.length > 0) {
-          const currentProd = prodData.find((p) => p.id === activeProduct?.id) || prodData[0];
+          const storedProdId = localStorage.getItem("harvey_active_product_id");
+          const targetProdId = activeProduct?.id || (storedProdId ? Number(storedProdId) : null);
+          const currentProd = prodData.find((p) => p.id === targetProdId) || prodData[0];
           setActiveProduct(currentProd);
         } else {
           setActiveProduct(null);
@@ -123,10 +145,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setActiveView,
         companies,
         activeCompany,
-        setActiveCompany,
+        setActiveCompany: setAndStoreActiveCompany,
         products,
         activeProduct,
-        setActiveProduct,
+        setActiveProduct: setAndStoreActiveProduct,
         health,
         hardware,
         isLoading,

@@ -50,6 +50,8 @@ export const CompanyManagement: React.FC = () => {
     setIsGenerating(true);
     try {
       const res = await api.generateBusinessProfile(activeCompany.id, activeCompany.raw_business_notes);
+      const updated = { ...activeCompany, generated_profile: JSON.stringify(res.profile) };
+      setActiveCompany(updated);
       await refreshData();
       addToast(`Business Profile generated via ${res.model_used}!`, "success");
     } catch (err: any) {
