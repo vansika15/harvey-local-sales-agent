@@ -123,8 +123,40 @@ export const CompanyManagement: React.FC = () => {
   if (activeCompany?.generated_profile) {
     try {
       parsedProfile = JSON.parse(activeCompany.generated_profile);
+      if (typeof parsedProfile === "string") {
+        parsedProfile = JSON.parse(parsedProfile);
+      }
     } catch {}
   }
+
+  const renderSafeValue = (val: any): React.ReactNode => {
+    if (val === null || val === undefined) return null;
+    if (typeof val === "string" || typeof val === "number" || typeof val === "boolean") {
+      return String(val);
+    }
+    if (Array.isArray(val)) {
+      return val.map((item, idx) => (
+        <span key={idx}>
+          {typeof item === "object" ? JSON.stringify(item) : String(item)}
+          {idx < val.length - 1 ? ", " : ""}
+        </span>
+      ));
+    }
+    if (typeof val === "object") {
+      const entries = Object.entries(val);
+      return (
+        <span className="space-y-1 block">
+          {entries.map(([k, v], idx) => (
+            <span key={idx} className="block">
+              <strong className="text-slate-400 font-medium capitalize">{k.replace(/_/g, " ")}: </strong>
+              <span>{typeof v === "object" ? JSON.stringify(v) : String(v)}</span>
+            </span>
+          ))}
+        </span>
+      );
+    }
+    return String(val);
+  };
 
   return (
     <div className="space-y-6">
@@ -240,18 +272,18 @@ export const CompanyManagement: React.FC = () => {
               <div className="space-y-4">
                 <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
                   <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Vertical & Model</div>
-                  <div className="text-sm font-medium text-white">{parsedProfile.industry_vertical}</div>
-                  <div className="text-xs text-brand-400 mt-1">{parsedProfile.business_model}</div>
+                  <div className="text-sm font-medium text-white">{renderSafeValue(parsedProfile.industry_vertical)}</div>
+                  <div className="text-xs text-brand-400 mt-1">{renderSafeValue(parsedProfile.business_model)}</div>
                 </div>
 
                 <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
                   <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Core Value Proposition</div>
-                  <p className="text-sm text-slate-200 leading-relaxed">{parsedProfile.core_value_proposition}</p>
+                  <div className="text-sm text-slate-200 leading-relaxed">{renderSafeValue(parsedProfile.core_value_proposition)}</div>
                 </div>
 
                 <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
                   <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Target Market Summary</div>
-                  <p className="text-xs text-slate-300 leading-relaxed">{parsedProfile.target_market}</p>
+                  <div className="text-xs text-slate-300 leading-relaxed">{renderSafeValue(parsedProfile.target_market)}</div>
                 </div>
               </div>
 
@@ -259,18 +291,25 @@ export const CompanyManagement: React.FC = () => {
                 <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
                   <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Key Differentiators</div>
                   <ul className="space-y-1.5 text-xs text-slate-300">
-                    {parsedProfile.key_differentiators?.map((diff: string, i: number) => (
-                      <li key={i} className="flex items-start gap-2">
+                    {Array.isArray(parsedProfile.key_differentiators) ? (
+                      parsedProfile.key_differentiators.map((diff: any, i: number) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-emerald-400 font-bold">•</span>
+                          <span>{renderSafeValue(diff)}</span>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="flex items-start gap-2">
                         <span className="text-emerald-400 font-bold">•</span>
-                        <span>{diff}</span>
+                        <span>{renderSafeValue(parsedProfile.key_differentiators)}</span>
                       </li>
-                    ))}
+                    )}
                   </ul>
                 </div>
 
                 <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
                   <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Strategic Outbound Context</div>
-                  <p className="text-xs text-slate-300 leading-relaxed">{parsedProfile.sales_context}</p>
+                  <div className="text-xs text-slate-300 leading-relaxed">{renderSafeValue(parsedProfile.sales_context)}</div>
                 </div>
               </div>
             </div>

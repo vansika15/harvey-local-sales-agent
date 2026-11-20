@@ -3,6 +3,7 @@ import { useApp } from "./context/AppContext";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
 import { NotificationToastContainer } from "./components/NotificationToast";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 // Views
 import { OverviewDashboard } from "./views/OverviewDashboard";
@@ -68,7 +69,9 @@ export const App: React.FC = () => {
         <Header />
         <main className="flex-1 overflow-y-auto p-6 lg:p-8 bg-slate-950/40">
           <div className="max-w-7xl mx-auto">
-            {renderView()}
+            <ErrorBoundary>
+              {renderView()}
+            </ErrorBoundary>
           </div>
         </main>
       </div>

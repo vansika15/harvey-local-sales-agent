@@ -81,14 +81,32 @@ Ensure output is strictly valid JSON only. No preamble or conversational filler.
     except Exception:
         parsed_data = json.loads(deterministic_fallback)
 
+    # Normalize fields if LLM returned structured objects instead of strings
+    if isinstance(parsed_data.get("target_market"), dict):
+        parts = []
+        for k, v in parsed_data["target_market"].items():
+            if isinstance(v, (dict, list)):
+                parts.append(f"{k.replace('_', ' ').title()}: {json.dumps(v)}")
+            else:
+                parts.append(f"{k.replace('_', ' ').title()}: {v}")
+        parsed_data["target_market"] = " | ".join(parts)
+    elif isinstance(parsed_data.get("target_market"), list):
+        parsed_data["target_market"] = ", ".join(str(x) for x in parsed_data["target_market"])
+
+    if isinstance(parsed_data.get("key_differentiators"), list):
+        parsed_data["key_differentiators"] = [
+            str(x) if not isinstance(x, (dict, list)) else json.dumps(x)
+            for x in parsed_data["key_differentiators"]
+        ]
+
     # Update company record
     company.generated_profile = json.dumps(parsed_data, indent=2)
     if parsed_data.get("industry_vertical") and not company.industry:
-        company.industry = parsed_data["industry_vertical"]
+        company.industry = str(parsed_data["industry_vertical"])
     if parsed_data.get("target_market") and not company.target_market:
-        company.target_market = parsed_data["target_market"]
+        company.target_market = str(parsed_data["target_market"])
     if parsed_data.get("sales_context") and not company.business_context:
-        company.business_context = parsed_data["sales_context"]
+        company.business_context = str(parsed_data["sales_context"])
     
     db.commit()
 
