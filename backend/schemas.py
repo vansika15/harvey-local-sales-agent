@@ -175,6 +175,23 @@ class ProspectCreate(ProspectBase):
     source: Optional[str] = "manual"
 
 
+class ProspectUpdate(BaseModel):
+    company_id: Optional[int] = None
+    product_id: Optional[int] = None
+    company_name: Optional[str] = None
+    domain: Optional[str] = None
+    industry: Optional[str] = None
+    company_size: Optional[str] = None
+    location: Optional[str] = None
+    contact_name: Optional[str] = None
+    contact_role: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
+    linkedin_url: Optional[str] = None
+    website_url: Optional[str] = None
+    status: Optional[str] = None
+
+
 class ProspectResponse(ProspectBase):
     id: int
     fit_score: int
@@ -331,8 +348,8 @@ class GeneratedEmailResponse(BaseModel):
 # -----------------------------------------------------------------------------
 class ReplyClassifyRequest(BaseModel):
     inbound_message: str
-    prospect_id: int
-    product_id: int
+    prospect_id: Optional[int] = None
+    product_id: Optional[int] = None
     model_override: Optional[str] = None
 
 

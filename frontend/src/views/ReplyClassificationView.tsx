@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { MessageSquare, Sparkles, Send, CheckCircle2, AlertTriangle, XCircle, Clock, Calendar, HelpCircle, ArrowRight } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { MessageSquare, Sparkles, Send, CheckCircle2, AlertTriangle, XCircle, Clock, Calendar, HelpCircle, ArrowRight, User } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { api } from "../api/client";
 import { StatusBadge } from "../components/StatusBadge";
+import { Prospect } from "../types";
 
 interface PresetReply {
   label: string;
@@ -40,18 +41,37 @@ const PRESET_REPLIES: PresetReply[] = [
 
 export const ReplyClassificationView: React.FC = () => {
   const { activeCompany, activeProduct, addToast } = useApp();
+  const [prospects, setProspects] = useState<Prospect[]>([]);
+  const [selectedProspect, setSelectedProspect] = useState<Prospect | null>(null);
   const [inboundText, setInboundText] = useState(PRESET_REPLIES[0].message);
   const [classificationResult, setClassificationResult] = useState<any>(null);
   const [isClassifying, setIsClassifying] = useState(false);
 
+  useEffect(() => {
+    if (activeCompany) {
+      api.getProspects({ companyId: activeCompany.id })
+        .then((data) => {
+          setProspects(data);
+          if (data.length > 0) {
+            setSelectedProspect(data[0]);
+          } else {
+            setSelectedProspect(null);
+          }
+        })
+        .catch((err) => console.error("Error loading prospects:", err));
+    }
+  }, [activeCompany?.id]);
+
   const handleClassify = async () => {
-    if (!activeProduct) return;
+    if (!activeProduct) {
+      addToast("Please select a product from the header.", "error");
+      return;
+    }
     setIsClassifying(true);
     try {
-      // Use active prospect or fallback ID 1
       const res = await api.classifyReply(
         inboundText,
-        1,
+        selectedProspect?.id,
         activeProduct.id
       );
       setClassificationResult(res);
@@ -71,6 +91,40 @@ export const ReplyClassificationView: React.FC = () => {
         <p className="text-xs text-slate-400 mt-1">
           Workflow 8: Local AI sentiment and intent triage. Classifies inbound prospect responses, extracts objections, and drafts context-aware responses.
         </p>
+      </div>
+
+      {/* Target Prospect & Context */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur">
+        <div className="flex items-center gap-3">
+          <div className="p-1.5 rounded-lg bg-slate-800 text-brand-400 border border-slate-700">
+            <User className="w-4 h-4" />
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-slate-200 block">Target Prospect Context:</label>
+            <div className="text-[11px] text-slate-400">Select which prospect sent the inbound response</div>
+          </div>
+        </div>
+
+        {prospects.length > 0 ? (
+          <select
+            value={selectedProspect?.id || ""}
+            onChange={(e) => {
+              const found = prospects.find((p) => p.id === Number(e.target.value));
+              if (found) setSelectedProspect(found);
+            }}
+            className="bg-slate-800 hover:bg-slate-750 text-slate-100 text-xs font-medium rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-500 cursor-pointer"
+          >
+            {prospects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.contact_name ? `${p.contact_name} (${p.company_name})` : p.company_name}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <span className="text-xs text-amber-400 font-mono px-3 py-1 rounded bg-amber-950/30 border border-amber-800/40">
+            No prospects found for {activeCompany?.name || "this company"}
+          </span>
+        )}
       </div>
 
       {/* Preset Pickers */}

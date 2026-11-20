@@ -1,0 +1,145 @@
+{
+  "pages_visited": {
+    "1. Overview Dashboard": "PASSED",
+    "2. Company Profiles": "PASSED",
+    "3. Product Portfolio": "PASSED",
+    "4. Product ICP Engine": "PASSED",
+    "5. Prospects & Import": "PASSED",
+    "6. Account Research": "PASSED",
+    "7. Buying Signals": "PASSED",
+    "8. Problem Statements": "PASSED",
+    "9. Prospect Scoring": "PASSED",
+    "10. Personalised Emails": "PASSED",
+    "11. Reply Classifier": "PASSED",
+    "12. Conversation History": "PASSED",
+    "13. Hardware & Models": "PASSED",
+    "14. Model Audit Logs": "PASSED",
+    "15. Settings & System": "PASSED"
+  },
+  "crud_operations": {
+    "Create Company": {
+      "status": "PASSED",
+      "id": 6
+    },
+    "Edit Company": {
+      "status": "PASSED",
+      "updated_name": "AuditCorp Global"
+    },
+    "Create Multiple Products": {
+      "status": "PASSED",
+      "products": [
+        "AuditGuard Pro",
+        "AuditStream Enterprise"
+      ]
+    },
+    "Edit Product": {
+      "status": "PASSED",
+      "updated_name": "AuditGuard Enterprise Suite"
+    },
+    "Create Prospect": {
+      "status": "PASSED",
+      "id": 8
+    },
+    "Edit Prospect": {
+      "status": "PASSED",
+      "updated_role": "Chief Information Security Officer"
+    },
+    "Delete Prospect": "PASSED"
+  },
+  "ai_workflows": {
+    "Workflow 1: Business Profile": {
+      "status": "PASSED",
+      "log_id": 133,
+      "model": "qwen2.5:0.5b",
+      "latency_ms": 15503
+    },
+    "Workflow 2: Product ICP": {
+      "status": "PASSED",
+      "log_id": 134,
+      "model": "qwen2.5:0.5b",
+      "latency_ms": 16437
+    },
+    "Workflow 3: Prospect Research": {
+      "status": "PASSED",
+      "log_id": 135,
+      "model": "qwen2.5:0.5b",
+      "latency_ms": 27199
+    },
+    "Workflow 4: Buying Signals": {
+      "status": "PASSED",
+      "log_id": 136,
+      "model": "qwen2.5:0.5b",
+      "latency_ms": 15951
+    },
+    "Workflow 5: Problem Statements": {
+      "status": "PASSED",
+      "log_id": 137,
+      "model": "qwen2.5:0.5b",
+      "latency_ms": 25246
+    },
+    "Workflow 6: Personalised Emails": {
+      "status": "PASSED",
+      "log_id": 138,
+      "model": "qwen2.5:0.5b",
+      "latency_ms": 14162
+    },
+    "Workflow 7: Prospect Scoring": {
+      "status": "PASSED",
+      "log_id": 139,
+      "model": "qwen2.5:0.5b",
+      "latency_ms": 3403
+    }
+  },
+  "reply_classifier_presets": {
+    "Demo Booking Request": {
+      "status": "PASSED",
+      "classification": "meeting_requested",
+      "confidence": 0.8,
+      "sentiment": "neutral"
+    },
+    "Pricing & Collateral Request": {
+      "status": "PASSED",
+      "classification": "interested",
+      "confidence": 0.85,
+      "sentiment": "positive"
+    },
+    "Tech Stack & Budget Objection": {
+      "status": "PASSED",
+      "classification": "objection",
+      "confidence": 0.85,
+      "sentiment": "negative"
+    },
+    "Deferred / Follow-up Later": {
+      "status": "PASSED",
+      "classification": "not_interested",
+      "confidence": 0.85,
+      "sentiment": "neutral"
+    },
+    "Firm Unsubscribe": {
+      "status": "PASSED",
+      "classification": "not_interested",
+      "confidence": 0.8,
+      "sentiment": "neutral"
+    }
+  },
+  "reply_classifier_custom": {
+    "Custom Meeting Request": {
+      "status": "PASSED",
+      "classification": "meeting_requested",
+      "sentiment": "positive"
+    },
+    "Custom Budget Objection": {
+      "status": "PASSED",
+      "classification": "not_interested",
+      "sentiment": "neutral"
+    }
+  },
+  "offline_resilience": {
+    "UI Offline Toggle": "PASSED"
+  },
+  "responsiveness": {
+    "Tablet (768x1024)": "PASSED",
+    "Mobile (375x812)": "PASSED"
+  },
+  "browser_console_errors": []
+}

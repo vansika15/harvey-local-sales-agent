@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Users, Upload, Plus, Search, Filter, Globe, Mail, Phone, ExternalLink, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Users, Upload, Plus, Search, Filter, Globe, Mail, Phone, ExternalLink, ArrowRight, CheckCircle2, Edit3, Trash2 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { api } from "../api/client";
 import { StatusBadge } from "../components/StatusBadge";
@@ -28,6 +28,65 @@ export const ProspectDiscoveryView: React.FC = () => {
   const [contactName, setContactName] = useState("");
   const [contactRole, setContactRole] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+
+  // Edit Form State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProspectId, setEditingProspectId] = useState<number | null>(null);
+  const [editCName, setEditCName] = useState("");
+  const [editDomain, setEditDomain] = useState("");
+  const [editIndustry, setEditIndustry] = useState("");
+  const [editSize, setEditSize] = useState("50-200 employees");
+  const [editLocation, setEditLocation] = useState("");
+  const [editContactName, setEditContactName] = useState("");
+  const [editContactRole, setEditContactRole] = useState("");
+  const [editContactEmail, setEditContactEmail] = useState("");
+
+  const startEditProspect = (p: Prospect) => {
+    setEditingProspectId(p.id);
+    setEditCName(p.company_name);
+    setEditDomain(p.domain || "");
+    setEditIndustry(p.industry || "");
+    setEditSize(p.company_size || "50-200 employees");
+    setEditLocation(p.location || "");
+    setEditContactName(p.contact_name || "");
+    setEditContactRole(p.contact_role || "");
+    setEditContactEmail(p.contact_email || "");
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateProspect = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProspectId) return;
+    try {
+      await api.updateProspect(editingProspectId, {
+        company_id: activeCompany?.id,
+        company_name: editCName,
+        domain: editDomain,
+        industry: editIndustry,
+        company_size: editSize,
+        location: editLocation,
+        contact_name: editContactName,
+        contact_role: editContactRole,
+        contact_email: editContactEmail,
+      });
+      await loadProspects();
+      setIsEditModalOpen(false);
+      addToast(`Updated prospect ${editCName}`, "success");
+    } catch (err: any) {
+      addToast(`Update failed: ${err.message}`, "error");
+    }
+  };
+
+  const handleDeleteProspect = async (id: number, name: string) => {
+    if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+    try {
+      await api.deleteProspect(id);
+      await loadProspects();
+      addToast(`Deleted prospect ${name}`, "info");
+    } catch (err: any) {
+      addToast(`Delete failed: ${err.message}`, "error");
+    }
+  };
 
   const loadProspects = async () => {
     if (!activeCompany) return;
@@ -239,6 +298,20 @@ export const ProspectDiscoveryView: React.FC = () => {
                         >
                           Draft Email
                         </button>
+                        <button
+                          onClick={() => startEditProspect(p)}
+                          className="p-1 rounded text-slate-500 hover:text-brand-400 transition-colors"
+                          title="Edit prospect"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProspect(p.id, p.company_name)}
+                          className="p-1 rounded text-slate-500 hover:text-rose-400 transition-colors"
+                          title="Delete prospect"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -384,6 +457,109 @@ export const ProspectDiscoveryView: React.FC = () => {
               className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold"
             >
               Add Prospect
+            </button>
+          </div>
+        </form>
+      </Modal>
+      {/* Edit Prospect Modal */}
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Prospect Details">
+        <form onSubmit={handleUpdateProspect} className="space-y-4 text-xs">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Company Name *</label>
+              <input
+                type="text"
+                required
+                value={editCName}
+                onChange={(e) => setEditCName(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Domain</label>
+              <input
+                type="text"
+                value={editDomain}
+                onChange={(e) => setEditDomain(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Industry</label>
+              <input
+                type="text"
+                value={editIndustry}
+                onChange={(e) => setEditIndustry(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Company Size</label>
+              <input
+                type="text"
+                value={editSize}
+                onChange={(e) => setEditSize(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Location</label>
+              <input
+                type="text"
+                value={editLocation}
+                onChange={(e) => setEditLocation(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Contact Name</label>
+              <input
+                type="text"
+                value={editContactName}
+                onChange={(e) => setEditContactName(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Contact Role</label>
+              <input
+                type="text"
+                value={editContactRole}
+                onChange={(e) => setEditContactRole(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Contact Email</label>
+            <input
+              type="email"
+              value={editContactEmail}
+              onChange={(e) => setEditContactEmail(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+            />
+          </div>
+
+          <div className="pt-3 border-t border-slate-800 flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold"
+            >
+              Update Prospect
             </button>
           </div>
         </form>

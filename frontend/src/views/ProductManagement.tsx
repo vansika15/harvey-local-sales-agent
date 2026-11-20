@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Package, Plus, Trash2, CheckCircle2, DollarSign, Tag, ArrowRight } from "lucide-react";
+import { Package, Plus, Trash2, Edit3, CheckCircle2, DollarSign, Tag, ArrowRight } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { api } from "../api/client";
 import { Modal } from "../components/Modal";
@@ -18,6 +18,50 @@ export const ProductManagement: React.FC = () => {
   const [pricing, setPricing] = useState("$99/mo per seat");
   const [painPointsRaw, setPainPointsRaw] = useState("");
   const [featuresRaw, setFeaturesRaw] = useState("");
+
+  // Edit State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProdId, setEditingProdId] = useState<number | null>(null);
+  const [editProdName, setEditProdName] = useState("");
+  const [editProdCategory, setEditProdCategory] = useState("");
+  const [editProdDesc, setEditProdDesc] = useState("");
+  const [editProdValProp, setEditProdValProp] = useState("");
+  const [editProdTargetCust, setEditProdTargetCust] = useState("");
+  const [editProdPricing, setEditProdPricing] = useState("");
+
+  const startEditProduct = (p: Product) => {
+    setEditingProdId(p.id);
+    setEditProdName(p.name);
+    setEditProdCategory(p.category || "");
+    setEditProdDesc(p.description || "");
+    setEditProdValProp(p.value_proposition || "");
+    setEditProdTargetCust(p.target_customer_summary || "");
+    setEditProdPricing(p.pricing_model || "");
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateProduct = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProdId) return;
+    try {
+      const updated = await api.updateProduct(editingProdId, {
+        name: editProdName,
+        category: editProdCategory,
+        description: editProdDesc,
+        value_proposition: editProdValProp,
+        target_customer_summary: editProdTargetCust,
+        pricing_model: editProdPricing,
+      });
+      await refreshData();
+      if (activeProduct?.id === editingProdId) {
+        setActiveProduct(updated);
+      }
+      setIsEditModalOpen(false);
+      addToast(`Product '${updated.name}' updated!`, "success");
+    } catch (err: any) {
+      addToast(`Update failed: ${err.message}`, "error");
+    }
+  };
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,9 +201,20 @@ export const ProductManagement: React.FC = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      startEditProduct(p);
+                    }}
+                    className="p-1 rounded text-slate-500 hover:text-emerald-400 transition-colors"
+                    title="Edit product"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
                       handleDelete(p.id, p.name);
                     }}
                     className="p-1 rounded text-slate-500 hover:text-rose-400 transition-colors"
+                    title="Delete product"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -255,6 +310,89 @@ export const ProductManagement: React.FC = () => {
               className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold"
             >
               Save Product
+            </button>
+          </div>
+        </form>
+      </Modal>
+      {/* Edit Product Modal */}
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Product Details">
+        <form onSubmit={handleUpdateProduct} className="space-y-4 text-xs">
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Product Name *</label>
+            <input
+              type="text"
+              required
+              value={editProdName}
+              onChange={(e) => setEditProdName(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Category</label>
+              <input
+                type="text"
+                value={editProdCategory}
+                onChange={(e) => setEditProdCategory(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Pricing Model</label>
+              <input
+                type="text"
+                value={editProdPricing}
+                onChange={(e) => setEditProdPricing(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Product Description *</label>
+            <textarea
+              rows={2}
+              required
+              value={editProdDesc}
+              onChange={(e) => setEditProdDesc(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Value Proposition</label>
+            <textarea
+              rows={2}
+              value={editProdValProp}
+              onChange={(e) => setEditProdValProp(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Target Customer Summary</label>
+            <input
+              type="text"
+              value={editProdTargetCust}
+              onChange={(e) => setEditProdTargetCust(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <div className="pt-3 border-t border-slate-800 flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold"
+            >
+              Update Product
             </button>
           </div>
         </form>

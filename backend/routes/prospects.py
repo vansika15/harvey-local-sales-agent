@@ -11,7 +11,7 @@ from backend.models import (
     GeneratedEmail, ProspectScore
 )
 from backend.schemas import (
-    ProspectCreate, ProspectResponse, ResearchRequest,
+    ProspectCreate, ProspectUpdate, ProspectResponse, ResearchRequest,
     ProspectResearchResponse, BuyingSignalResponse, SignalClassifyRequest,
     ProblemStatementResponse, ProblemGenerateRequest,
     GeneratedEmailResponse, EmailGenerateRequest,
@@ -105,6 +105,47 @@ def get_prospect(prospect_id: int, db: Session = Depends(get_db)):
     if not p:
         raise HTTPException(status_code=404, detail="Prospect not found")
 
+    return {
+        "id": p.id,
+        "company_id": p.company_id,
+        "product_id": p.product_id,
+        "company_name": p.company_name,
+        "domain": p.domain,
+        "industry": p.industry,
+        "company_size": p.company_size,
+        "location": p.location,
+        "contact_name": p.contact_name,
+        "contact_role": p.contact_role,
+        "contact_email": p.contact_email,
+        "contact_phone": p.contact_phone,
+        "linkedin_url": p.linkedin_url,
+        "website_url": p.website_url,
+        "fit_score": p.fit_score or 0,
+        "signal_score": p.signal_score or 0,
+        "overall_score": p.overall_score or 0,
+        "score_breakdown": json.loads(p.score_breakdown or "{}"),
+        "score_reasoning": p.score_reasoning,
+        "status": p.status,
+        "source": p.source,
+        "is_sample": p.is_sample,
+        "created_at": p.created_at,
+        "updated_at": p.updated_at,
+    }
+
+
+@router.put("/{prospect_id}", response_model=ProspectResponse)
+def update_prospect(prospect_id: int, payload: ProspectUpdate, db: Session = Depends(get_db)):
+    """Update prospect details."""
+    p = db.query(Prospect).filter(Prospect.id == prospect_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Prospect not found")
+
+    data = payload.model_dump(exclude_unset=True)
+    for key, val in data.items():
+        if hasattr(p, key) and val is not None:
+            setattr(p, key, val)
+    db.commit()
+    db.refresh(p)
     return {
         "id": p.id,
         "company_id": p.company_id,

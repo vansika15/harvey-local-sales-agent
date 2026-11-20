@@ -93,6 +93,8 @@ export const api = {
   getProspect: (id: number) => request<Prospect>(`/prospects/${id}`),
   createProspect: (data: Partial<Prospect>) =>
     request<Prospect>("/prospects", { method: "POST", body: JSON.stringify(data) }),
+  updateProspect: (id: number, data: Partial<Prospect>) =>
+    request<Prospect>(`/prospects/${id}`, { method: "PUT", body: JSON.stringify(data) }),
   deleteProspect: (id: number) => request<void>(`/prospects/${id}`, { method: "DELETE" }),
 
   importCSV: async (companyId: number, file: File) => {
@@ -191,7 +193,7 @@ export const api = {
     }),
 
   // Workflow 8: Reply Classification
-  classifyReply: (inboundMessage: string, prospectId: number, productId: number, modelOverride?: string) =>
+  classifyReply: (inboundMessage: string, prospectId?: number, productId?: number, modelOverride?: string) =>
     request<{
       reply_id: number;
       classification: string;

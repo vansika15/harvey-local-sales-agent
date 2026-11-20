@@ -13,19 +13,33 @@ from backend.services.ollama_service import ollama_service
 
 async def classify_conversation_reply(
     inbound_message: str,
-    prospect_id: int,
-    product_id: int,
+    prospect_id: Optional[int],
+    product_id: Optional[int],
     db: Session,
     model_override: Optional[str] = None
 ) -> Dict[str, Any]:
     """Classify prospect email reply, explain classification, and suggest response using local AI."""
-    prospect = db.query(Prospect).filter(Prospect.id == prospect_id).first()
-    if not prospect:
-        raise ValueError(f"Prospect ID {prospect_id} not found.")
-
-    product = db.query(Product).filter(Product.id == product_id).first()
+    # Resolve product
+    product = None
+    if product_id is not None:
+        product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
-        raise ValueError(f"Product ID {product_id} not found.")
+        product = db.query(Product).first()
+        if not product:
+            raise ValueError("No products found in system. Please register at least one product.")
+
+    # Resolve prospect safely without crashing on missing ID
+    prospect = None
+    if prospect_id is not None:
+        prospect = db.query(Prospect).filter(Prospect.id == prospect_id).first()
+    if not prospect:
+        # Fallback 1: First prospect for this product's company
+        prospect = db.query(Prospect).filter(Prospect.company_id == product.company_id).first()
+    if not prospect:
+        # Fallback 2: Any prospect in database
+        prospect = db.query(Prospect).first()
+    if not prospect:
+        raise ValueError("No prospects found in system. Please add at least one prospect to classify replies against.")
 
     prompt = f"""You are an expert Sales Triage Specialist and Conversation AI.
 Analyze the following inbound email message received from a prospect and classify it accurately.

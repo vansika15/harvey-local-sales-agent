@@ -19,6 +19,53 @@ export const CompanyManagement: React.FC = () => {
   const [targetMarket, setTargetMarket] = useState("");
   const [notes, setNotes] = useState("");
 
+  // Edit State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editDomain, setEditDomain] = useState("");
+  const [editIndustry, setEditIndustry] = useState("");
+  const [editSize, setEditSize] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editTargetMarket, setEditTargetMarket] = useState("");
+  const [editNotes, setEditNotes] = useState("");
+
+  const startEdit = (c: Company) => {
+    setEditingId(c.id);
+    setEditName(c.name);
+    setEditDomain(c.domain || "");
+    setEditIndustry(c.industry || "");
+    setEditSize(c.size || "50-200 employees");
+    setEditDescription(c.description || "");
+    setEditTargetMarket(c.target_market || "");
+    setEditNotes(c.raw_business_notes || "");
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingId) return;
+    try {
+      const updated = await api.updateCompany(editingId, {
+        name: editName,
+        domain: editDomain,
+        industry: editIndustry,
+        size: editSize,
+        description: editDescription,
+        target_market: editTargetMarket,
+        raw_business_notes: editNotes,
+      });
+      await refreshData();
+      if (activeCompany?.id === editingId) {
+        setActiveCompany(updated);
+      }
+      setIsEditModalOpen(false);
+      addToast(`Company '${updated.name}' updated!`, "success");
+    } catch (err: any) {
+      addToast(`Update failed: ${err.message}`, "error");
+    }
+  };
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -141,9 +188,20 @@ export const CompanyManagement: React.FC = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
+                    startEdit(c);
+                  }}
+                  className="p-1 rounded text-slate-500 hover:text-brand-400 transition-colors"
+                  title="Edit organization"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
                     handleDelete(c.id, c.name);
                   }}
                   className="p-1 rounded text-slate-500 hover:text-rose-400 transition-colors"
+                  title="Delete organization"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -308,6 +366,97 @@ export const CompanyManagement: React.FC = () => {
               className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold"
             >
               Save Organization
+            </button>
+          </div>
+        </form>
+      </Modal>
+      {/* Edit Organization Modal */}
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Organization Details">
+        <form onSubmit={handleUpdate} className="space-y-4 text-xs">
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Company Name *</label>
+            <input
+              type="text"
+              required
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Domain</label>
+              <input
+                type="text"
+                value={editDomain}
+                onChange={(e) => setEditDomain(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Industry</label>
+              <input
+                type="text"
+                value={editIndustry}
+                onChange={(e) => setEditIndustry(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Company Size</label>
+              <input
+                type="text"
+                value={editSize}
+                onChange={(e) => setEditSize(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Company Description</label>
+            <textarea
+              rows={2}
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Target Market</label>
+            <input
+              type="text"
+              value={editTargetMarket}
+              onChange={(e) => setEditTargetMarket(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium text-slate-300 mb-1">Raw Business Notes / Context</label>
+            <textarea
+              rows={3}
+              value={editNotes}
+              onChange={(e) => setEditNotes(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"
+            />
+          </div>
+
+          <div className="pt-3 border-t border-slate-800 flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold"
+            >
+              Update Organization
             </button>
           </div>
         </form>
